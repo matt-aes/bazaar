@@ -5,7 +5,7 @@
 .idea
 
 # Vendor dependencies
-vendor/*
+vendor
 
 # Python caches and virtual environment
 *__pycache__*
