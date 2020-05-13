@@ -1,0 +1,18 @@
+# Mac desktop database
+.DS_Store
+
+# GoLand/PyCharm settings.
+.idea
+
+# Vendor dependencies
+vendor/*
+
+# Python caches and virtual environment
+*__pycache__*
+venv
+
+# Build artifacts
+go_run
+
+# Text files just for testing the wiki functionality
+*.wiki.txt
