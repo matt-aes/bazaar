@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: pyservice
-        image: brucehorn/pyservice:0.0.1
+        image: brucehorn/service_preview-pyservice:0.0.2
         ports:
         - containerPort: 5000
 

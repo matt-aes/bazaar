@@ -11,7 +11,7 @@ vendor
 *__pycache__*
 venv
 
-# Build artifacts
+# Build artifacts from go
 go_run
 
 # Text files just for testing the wiki functionality

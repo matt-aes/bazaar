@@ -1,5 +1,6 @@
 import os
 import logging
+import requests
 
 from flask import Flask
 
@@ -18,3 +19,4 @@ if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
     logging.info(f"\nStarting pyservice on {HOST}:{PORT}\n")
     app.run(host=HOST, port=PORT)
+

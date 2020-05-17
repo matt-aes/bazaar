@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: goservice
-          image: brucehorn/goservice:0.0.2
+          image: brucehorn/service_preview-goservice:0.0.2
           imagePullPolicy: Always
           ports:
             - containerPort: 8080

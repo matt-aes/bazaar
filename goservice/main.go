@@ -102,6 +102,6 @@ func main() {
 	http.HandleFunc("/save/", makeHandler(saveHandler))
 
 	fmt.Println("listening at localhost:8080")
-	fmt.Println("Try http://localhost:8080/view/AWikiPage")
+	fmt.Println("Try http://localhost:8080/hello")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
