@@ -42,5 +42,5 @@ metadata:
   name: a-python-service
   namespace: default
 spec:
-  prefix: /py
+  prefix: /py/
   service: pyservice

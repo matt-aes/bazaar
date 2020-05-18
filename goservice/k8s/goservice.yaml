@@ -43,6 +43,6 @@ metadata:
   name: a-go-service
   namespace: default
 spec:
-  prefix: /go
+  prefix: /go/
   service: goservice
 
