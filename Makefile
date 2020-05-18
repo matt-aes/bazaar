@@ -28,3 +28,8 @@ push_images: build_images
 	make -C goservice  push_image
 	make -C pyservice  push_image
 	@echo ">>> images pushed! You can 'make deploy' (or 'redeploy') now."
+
+deploy:
+	@echo ">>> deploying to cluster..."
+	make -C goservice deploy
+	make -C pyservice deploy

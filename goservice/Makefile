@@ -25,3 +25,6 @@ push_image: build_image
 	$(DOCKER_PUSH) $(IMAGE_NAME_LATEST)
 	@echo ">>> done!"
 
+deploy:
+	@echo ">>> deploying goservice to cluster..."
+	kubectl apply -f k8s/goservice.yaml

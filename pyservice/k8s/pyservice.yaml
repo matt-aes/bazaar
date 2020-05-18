@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: pyservice
-        image: brucehorn/service_preview-pyservice:0.0.2
+        image: brucehorn/service_preview-pyservice:latest
         ports:
         - containerPort: 5000
 
@@ -39,8 +39,8 @@ spec:
 apiVersion: getambassador.io/v2
 kind: Mapping
 metadata:
-  name: my-first-service
+  name: a-python-service
   namespace: default
 spec:
-  prefix: /
+  prefix: /py
   service: pyservice

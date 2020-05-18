@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: goservice
-          image: brucehorn/service_preview-goservice:0.0.2
+          image: brucehorn/service_preview-goservice:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
@@ -40,9 +40,9 @@ spec:
 apiVersion: getambassador.io/v2
 kind: Mapping
 metadata:
-  name: minimal-goservice
+  name: a-go-service
   namespace: default
 spec:
-  prefix: /
+  prefix: /go
   service: goservice
 
