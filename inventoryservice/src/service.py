@@ -2,7 +2,7 @@ import os
 import json
 import logging
 
-from flask import Flask
+from flask import Flask, Response
 from pathlib import Path
 
 # Configuration
@@ -26,10 +26,14 @@ def load_inventory():
 
 @flask_app.route('/inventory')
 def return_all_inventory():
-    for registration, item in inventory.items():
+    if True:
+        result = []
+        for registration, item in inventory.items():
+            result.append(item)
 
-
-    return "Inventory not available", 404
+        return Response(json.dumps(result),  mimetype='application/json')
+    else:
+        return "Inventory not available", 404
 
 if __name__ == '__main__':
     # Load the inventory.  This is scoped to all app routes and available in handlers.

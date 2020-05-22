@@ -2,7 +2,7 @@ import os
 import json
 import logging
 
-from flask import Flask, render_template
+from flask import Flask, Response
 from pathlib import Path
 
 # Configuration
@@ -25,10 +25,10 @@ def load_specs():
 
 
 # The only GET route: given an aircraft model name, return the specifications.
-@flask_app.route('/spec/<model>')
+@flask_app.route('/specs/<model>')
 def return_specification(model):
     if model in specs.keys():
-        return specs[model]
+        return Response(json.dumps(specs[model]),  mimetype='application/json')
     else:
         return "Aircraft model not found", 404
 
@@ -39,6 +39,6 @@ if __name__ == '__main__':
 
     # Set up logging and run the server.
     logging.basicConfig(level=logging.INFO)
-    logging.info(f"\nStarting pyservice on {HOST}:{PORT}\n")
+    logging.info(f"\nStarting specsservice on {HOST}:{PORT}\n")
     flask_app.run(host=HOST, port=PORT)
 
