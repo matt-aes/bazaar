@@ -1,0 +1,52 @@
+[
+  {
+    "registration": "N567M",
+    "model": "Beechcraft Bonanza",
+    "minimum bid": 65000
+  },
+  {
+    "registration": "N8880S",
+    "model": "Beechcraft Bonanza",
+    "minimum bid": 52000
+  },
+  {
+    "registration": "N8204T",
+    "model": "Cessna 180",
+    "minimum bid": 38000
+  },
+  {
+    "registration": "G-BTSM",
+    "model": "Cessna 180",
+    "minimum bid": 42000
+  },
+  {
+    "registration": "CF-NLX",
+    "model": "Alon Ercoupe",
+    "minimum bid": 14000
+  },
+  {
+    "registration": "CF-LUN",
+    "model": "Alon Ercoupe",
+    "minimum bid": 18000
+  },
+  {
+    "registration": "D-ICHO",
+    "model": "Cessna Skymaster",
+    "minimum bid": 92000
+  },
+  {
+    "registration": "CS-AUX",
+    "model": "Cessna Skymaster",
+    "minimum bid": 110000
+  },
+  {
+    "registration": "C-FQPK",
+    "model": "Piper Twin Comanche",
+    "minimum bid": 80000
+  },
+  {
+    "registration": "N818Y",
+    "model": "Piper Twin Comanche",
+    "minimum bid": 72000
+  }
+]

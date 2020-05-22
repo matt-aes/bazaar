@@ -1,4 +1,5 @@
 import os
+import json
 import logging
 import requests
 
@@ -29,6 +30,15 @@ def forward_to_go_service():
     # Now make a request of the go service and return its value.
     r = requests.get("http://goservice/hello", verify=False)
     return f"/goservice/hello returned {r.status_code} => {r.text}"
+
+@app.route('/jsonfromgo')
+def fetch_json_from_go():
+    logging.info("handled /jsonfromgo")
+
+    # Now make a request of the go service and return its value.
+    r = requests.get("http://goservice/getjson", verify=False)
+    nice_json = json.dumps(r.json(), indent=2)
+    return f"/goservice/getjson returned {r.status_code} => \n{nice_json}"
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)

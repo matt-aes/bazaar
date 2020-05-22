@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: specsservice
+  labels:
+    app: specsapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: specsapp
+  template:
+    metadata:
+      labels:
+        app: specsapp
+    spec:
+      containers:
+      - name: specsservice
+        image: brucehorn/service_preview-specsservice:latest
+        ports:
+        - containerPort: 5000
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: specsservice
+spec:
+  selector:
+    app: specs_app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+
+---
+
+apiVersion: getambassador.io/v2
+kind: Mapping
+metadata:
+  name: specsservice
+  namespace: default
+spec:
+  prefix: /specs/
+  service: specsservice

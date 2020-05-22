@@ -1,0 +1,42 @@
+[{
+  "model": "Beechcraft Bonanza",
+  "type": "single",
+  "hp": 300,
+  "seats": 6,
+  "speed": 160,
+  "range": 600,
+  "load": 1200 },
+  {
+    "model": "Cessna Skymaster",
+    "type": "twin",
+    "hp": 420,
+    "seats": 6,
+    "speed": 180,
+    "range": 840,
+    "load": 1700 },
+  {
+    "model": "Cessna 180",
+    "type": "single",
+    "hp": 230,
+    "seats": 6,
+    "speed": 140,
+    "range": 890,
+    "load": 1100 },
+
+  {
+    "model": "Alon Ercoupe",
+    "type": "single",
+    "hp": 75,
+    "seats": 2,
+    "speed": 80,
+    "range": 300,
+    "load": 550 },
+  {
+    "model": "Piper Twin Comanche",
+    "type": "twin",
+    "hp": 320,
+    "seats": 4,
+    "speed": 155,
+    "range": 1000,
+    "load": 1500 }
+  ]

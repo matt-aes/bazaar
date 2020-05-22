@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inventoryservice
+  labels:
+    app: inventoryapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inventoryapp
+  template:
+    metadata:
+      labels:
+        app: inventoryapp
+    spec:
+      containers:
+      - name: inventoryservice
+        image: brucehorn/service_preview-inventoryservice:latest
+        ports:
+        - containerPort: 5000
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: inventoryservice
+spec:
+  selector:
+    app: inventoryapp
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+
+---
+
+apiVersion: getambassador.io/v2
+kind: Mapping
+metadata:
+  name: inventoryservice
+  namespace: default
+spec:
+  prefix: /inventory/
+  service: inventoryservice

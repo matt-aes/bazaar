@@ -6,6 +6,7 @@ package main
 
 import (
 	"crypto/tls"
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"io/ioutil"
@@ -94,6 +95,28 @@ func helloHandler2(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "/hello => Hello Go World! v3")
 }
 
+type PersonalProfile struct {
+	Name    string
+	Hobbies []string
+}
+
+func testJsonResponse(w http.ResponseWriter, r *http.Request) {
+	log.Printf("/testJsonHandler => a cool json structure")
+
+	profile := PersonalProfile{"Bruce", []string{"flying", "telemark skiing", "travel", "running"}}
+
+	// Return Json: marshal the struct.
+	js, err := json.Marshal(profile)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Tell the client that the content type is json
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(js)
+}
+
 func forwardHandler(w http.ResponseWriter, r *http.Request) {
 	log.Printf("/fwd => about to forward to python service")
 	res, err := http.Get("http://pyservice/hello")
@@ -125,6 +148,7 @@ func main() {
 	http.HandleFunc("/", helloHandler1)
 	http.HandleFunc("/fwd", forwardHandler)
 	http.HandleFunc("/hello", helloHandler2)
+	http.HandleFunc("/getjson", testJsonResponse)
 	http.HandleFunc("/view/", makeHandler(viewHandler))
 	http.HandleFunc("/edit/", makeHandler(editHandler))
 	http.HandleFunc("/save/", makeHandler(saveHandler))

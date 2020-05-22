@@ -18,18 +18,27 @@ all:    build_images push_images
 
 build_images:
 	@echo ">>> Building images..."
-	make -C goservice  build_image
-	make -C pyservice  build_image
+	make -C goservice         build_image
+	make -C pyservice         build_image
+	make -C specsservice      build_image
+	make -C inventoryservice  build_image
+	make -C imageservice      build_image
 	@echo ">>> images built! You can 'make push_images' now."
 
 # note: the `image.push` in the subdirs trigger a build automatically
 push_images: build_images
 	@echo ">>> Pushing images..."
-	make -C goservice  push_image
-	make -C pyservice  push_image
+	make -C goservice         push_image
+	make -C pyservice         push_image
+	make -C specsservice      push_image
+	make -C inventoryservice  push_image
+	make -C imageservice      push_image
 	@echo ">>> images pushed! You can 'make deploy' (or 'redeploy') now."
 
 deploy:
 	@echo ">>> deploying to cluster..."
-	make -C goservice deploy
-	make -C pyservice deploy
+	make -C goservice        deploy
+	make -C pyservice        deploy
+	make -C specsservice     deploy
+	make -C inventoryservice deploy
+	make -C imageservice     deploy
