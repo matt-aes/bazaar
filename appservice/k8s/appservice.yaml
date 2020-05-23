@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: goservice
+  name: appservice
   labels:
-    app: goservice
+    app: appservice
 spec:
   replicas: 1
   selector:
@@ -15,8 +15,8 @@ spec:
         app: goapp
     spec:
       containers:
-        - name: goservice
-          image: brucehorn/service_preview-goservice:latest
+        - name: appservice
+          image: brucehorn/service_preview-appservice:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
@@ -26,7 +26,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: goservice
+  name: appservice
 spec:
   selector:
     app: goapp
@@ -40,9 +40,9 @@ spec:
 apiVersion: getambassador.io/v2
 kind: Mapping
 metadata:
-  name: a-go-service
+  name: appservice
   namespace: default
 spec:
-  prefix: /go/
-  service: goservice
+  prefix: /app/
+  service: appservice
 
