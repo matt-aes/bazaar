@@ -3,6 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ .Model }} {{ .Registration }}</title>
+
+    <style>
+        table {
+            table-layout: fixed
+        }
+
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse
+        }
+
+        th, td {
+            padding: 4px;
+            text-align: left;
+            font-size: 24px;
+        }
+
+        table#result tr:nth-child(even) {
+            background-color: #eee;
+        }
+
+        table#result tr:nth-child(odd) {
+            background-color: #fff;
+        }
+
+        table#result th {
+            background-color: black;
+            color: white;
+        }
+
+    </style>
 </head>
 <body>
 
