@@ -23,6 +23,7 @@ build_images:
 	make -C specsservice      build_image
 	make -C inventoryservice  build_image
 	make -C imageservice      build_image
+	make -C application       build_image
 	@echo ">>> images built! You can 'make push_images' now."
 
 # note: the `image.push` in the subdirs trigger a build automatically
@@ -33,6 +34,7 @@ push_images: build_images
 	make -C specsservice      push_image
 	make -C inventoryservice  push_image
 	make -C imageservice      push_image
+	make -C application       push_image
 	@echo ">>> images pushed! You can 'make deploy' (or 'redeploy') now."
 
 deploy:
@@ -42,3 +44,5 @@ deploy:
 	make -C specsservice     deploy
 	make -C inventoryservice deploy
 	make -C imageservice     deploy
+	make -C application      deploy
+
