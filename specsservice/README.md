@@ -1,9 +1,9 @@
 # Specifications Server
 
 This is a Flask-based service that returns a JSON dictionary providing
-the specifications for an aicraft model in inventory.
+the specifications for an aircraft model in inventory.
 
-specs_service/spec/Cessna Skymaster
+specsservice/Cessna Skymaster
 
 will return the JSON data:
 
