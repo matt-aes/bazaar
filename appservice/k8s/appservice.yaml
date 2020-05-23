@@ -8,11 +8,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: goapp
+      app: mainapp
   template:
     metadata:
       labels:
-        app: goapp
+        app: mainapp
     spec:
       containers:
         - name: appservice
@@ -29,7 +29,7 @@ metadata:
   name: appservice
 spec:
   selector:
-    app: goapp
+    app: mainapp
   ports:
     - protocol: TCP
       port: 80
@@ -40,7 +40,7 @@ spec:
 apiVersion: getambassador.io/v2
 kind: Mapping
 metadata:
-  name: appservice
+  name: an-app-service
   namespace: default
 spec:
   prefix: /app/

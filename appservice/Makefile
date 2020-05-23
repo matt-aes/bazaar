@@ -1,5 +1,5 @@
 # SHELL, DOCKER_REPO defined in ../Makefile
-SERVICE_NAME      := application
+SERVICE_NAME      := appservice
 
 GIT_COMMIT        := $(shell git rev-parse --verify HEAD)
 TAG               := $(GIT_COMMIT)
@@ -26,5 +26,5 @@ push_image: build_image
 	@echo ">>> done!"
 
 deploy:
-	@echo ">>> deploying application to cluster..."
-	kubectl apply -f k8s/application.yaml
+	@echo ">>> deploying appservice to cluster..."
+	kubectl apply -f k8s/appservice.yaml
