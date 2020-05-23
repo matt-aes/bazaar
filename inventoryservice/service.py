@@ -2,7 +2,7 @@ import os
 import json
 import logging
 
-from flask import Flask, Response
+from flask import Flask, request, Response
 from pathlib import Path
 
 # Configuration
@@ -28,8 +28,14 @@ def load_inventory():
 def return_all_inventory():
     if True:
         result = []
-        for registration, item in inventory.items():
-            result.append(item)
+        for registration, aircraft in inventory.items():
+            result.append(aircraft)
+
+        # Generate URL back to each aircraft's image and add it to each
+        # aircraft dictionary item.  Host_URL has a trailing slash.
+        host = request.host_url
+        for aircraft in result:
+            aircraft["imageUrl"] = f"{request.host_url}image/{aircraft['registration']}"
 
         return Response(json.dumps(result),  mimetype='application/json')
     else:

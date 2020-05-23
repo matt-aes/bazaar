@@ -15,7 +15,10 @@ import (
 func imageServer(w http.ResponseWriter, r *http.Request) {
 	// Get the file requested by the registration number
 	imageFile, err := os.Open(fmt.Sprintf("data/%v.jpg", path.Base(r.URL.Path)))
+	log.Println("ImageServer requestURL = %s", r.URL)
+	log.Println("ImageServer Host = %s", r.Host)
 
+	// Get the Host header
 	if err != nil {
 		w.WriteHeader(http.StatusNotFound)
 	} else {

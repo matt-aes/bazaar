@@ -13,13 +13,11 @@ export
 #########################################################################
 
 # Phony targets for make: these are not files and will always run when invoked.
-.PHONY: build_images push_images build_specs
+.PHONY: build_images push_images app image inventory
 all:    build_images push_images
 
 build_images:
 	@echo ">>> Building images..."
-	make -C goservice         build_image
-	make -C pyservice         build_image
 	make -C specsservice      build_image
 	make -C inventoryservice  build_image
 	make -C imageservice      build_image
@@ -29,24 +27,37 @@ build_images:
 # note: the `image.push` in the subdirs trigger a build automatically
 push_images: build_images
 	@echo ">>> Pushing images..."
-	make -C goservice         push_image
-	make -C pyservice         push_image
 	make -C specsservice      push_image
 	make -C inventoryservice  push_image
 	make -C imageservice      push_image
 	make -C appservice        push_image
 	@echo ">>> images pushed! You can 'make deploy' (or 'redeploy') now."
 
+# Deploy all services once images have been built.
 deploy:
 	@echo ">>> deploying to cluster..."
-	make -C goservice        deploy
-	make -C pyservice        deploy
 	make -C specsservice     deploy
 	make -C inventoryservice deploy
 	make -C imageservice     deploy
 	make -C appservice       deploy
 
-build_specs:
+# Build, push, deploy individual services.
+app:
+	make -C appservice       build_image
+	make -C appservice       push_image
+	make -C appservice       deploy
+
+images:
+	make -C imageservice     build_image
+	make -C imageservice     push_image
+	make -C imageservice     deploy
+
+inventory:
+	make -C inventoryservice build_image
+	make -C inventoryservice push_image
+	make -C inventoryservice deploy
+
+specs:
 	make -C specsservice     build_image
 	make -C specsservice     push_image
 	make -C specsservice     deploy
