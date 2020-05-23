@@ -2,14 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Search Results</title>
+    <title>{{ .Title }}</title>
 </head>
 <body>
 
 // Call template and pass a name parameter
 {{range .Items}}
     <div class="item">
-        {{template "header" .Name}}
         <span class="price">${{.Price}}</span>
     </div>
 {{end}}

@@ -24,7 +24,7 @@ def load_inventory():
     return { item["registration"]: item for item in inventorydata }
 
 
-@flask_app.route('/')
+@flask_app.route('/all')
 def return_all_inventory():
     if True:
         result = []

@@ -12,77 +12,36 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"regexp"
 )
 
-type Page struct {
-	Title string
-	Body  []byte
+// An individual aircraft
+type Aircraft struct {
+	Registration string
+	Model		string
+	Price		int
 }
 
-func (p *Page) save() error {
-	filename := p.Title + "wiki.txt"
-	return ioutil.WriteFile(filename, p.Body, 0600)
+// Result of an inventory search
+type SearchResults struct {
+	Title		string
+	Items		[]Aircraft
 }
 
-func loadPage(title string) (*Page, error) {
-	filename := title + "wiki.txt"
-	body, err := ioutil.ReadFile(filename)
-	if err != nil {
-		return nil, err
-	}
-	return &Page{Title: title, Body: body}, nil
+// Specifications for a given aircraft model
+type Specification struct {
+	Model		string
+	Type		string
+	HP			int
+	Seats		int
+	Speed		int
+	Range		int
+	Load		int
 }
 
-func viewHandler(w http.ResponseWriter, r *http.Request, title string) {
-	p, err := loadPage(title)
-	if err != nil {
-		http.Redirect(w, r, "/edit/"+title, http.StatusFound)
-		return
-	}
-	renderTemplate(w, "view", p)
-}
-
-func editHandler(w http.ResponseWriter, r *http.Request, title string) {
-	p, err := loadPage(title)
-	if err != nil {
-		p = &Page{Title: title}
-	}
-	renderTemplate(w, "edit", p)
-}
-
-func saveHandler(w http.ResponseWriter, r *http.Request, title string) {
-	body := r.FormValue("body")
-	p := &Page{Title: title, Body: []byte(body)}
-	err := p.save()
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	http.Redirect(w, r, "/view/"+title, http.StatusFound)
-}
-
-var templates = template.Must(template.ParseFiles("./static/html/edit.html", "./static/html/view.html"))
-
-func renderTemplate(w http.ResponseWriter, tmpl string, p *Page) {
-	err := templates.ExecuteTemplate(w, tmpl+".html", p)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
-}
-
-var validPath = regexp.MustCompile("^/(edit|save|view)/([a-zA-Z0-9]+)$")
-
-func makeHandler(fn func(http.ResponseWriter, *http.Request, string)) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		m := validPath.FindStringSubmatch(r.URL.Path)
-		if m == nil {
-			http.NotFound(w, r)
-			return
-		}
-		fn(w, r, m[2])
-	}
-}
+// Page templates
+var templates = template.Must(template.ParseFiles(
+	"./static/html/edit.html", "./static/html/view.html",  "./static/html/results.html",
+	"./static/html/home.html", "./static.html/detail.html"))
 
 func helloHandler1(w http.ResponseWriter, r *http.Request) {
 	log.Printf("/ => Hello Go World!")
@@ -117,6 +76,29 @@ func testJsonResponse(w http.ResponseWriter, r *http.Request) {
 	w.Write(js)
 }
 
+func getResultsPage(w http.ResponseWriter, r *http.Request) {
+	log.Printf("/fwd => about to forward to inventory service")
+	res, err := http.Get("http://inventoryservice/all")
+	log.Printf("     => returned from http.Get")
+
+	data, _ := ioutil.ReadAll(res.Body)
+	log.Printf("     => returned from ioutil.ReadAll()")
+	log.Printf("data was %v", data)
+
+	// We are returned a list of aircraft in JSON.  Create an array
+	// and unmarshal the data.
+	aircraft := make([]Aircraft, 0)
+	json.Unmarshal(data, &aircraft)
+
+	var results = &SearchResults{ Title: "Results", Items: aircraft }
+
+	// Now, generate the page from the template.
+	err = templates.ExecuteTemplate(w, "results.html", results)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
+
 func forwardHandler(w http.ResponseWriter, r *http.Request) {
 	log.Printf("/fwd => about to forward to python service")
 	res, err := http.Get("http://pyservice/hello")
@@ -149,9 +131,7 @@ func main() {
 	http.HandleFunc("/fwd", forwardHandler)
 	http.HandleFunc("/hello", helloHandler2)
 	http.HandleFunc("/getjson", testJsonResponse)
-	http.HandleFunc("/view/", makeHandler(viewHandler))
-	http.HandleFunc("/edit/", makeHandler(editHandler))
-	http.HandleFunc("/save/", makeHandler(saveHandler))
+	http.HandleFunc("/results", getResultsPage)
 
 	// Start listening
 	fmt.Println("listening at localhost:8080")
