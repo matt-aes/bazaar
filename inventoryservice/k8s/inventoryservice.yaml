@@ -18,7 +18,7 @@ spec:
       - name: inventoryservice
         image: brucehorn/service_preview-inventoryservice:latest
         ports:
-        - containerPort: 5000
+        - containerPort: 8080
 
 ---
 
@@ -32,7 +32,7 @@ spec:
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 5000
+      targetPort: 8080
 
 ---
 

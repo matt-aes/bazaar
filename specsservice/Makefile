@@ -26,5 +26,5 @@ push_image: build_image
 	@echo ">>> done!"
 
 deploy:
-	@echo ">>> deploying specs_service to cluster..."
-	kubectl apply -f k8s/specs_service.yaml
+	@echo ">>> deploying specsservice to cluster..."
+	kubectl apply -f k8s/specsservice.yaml

@@ -40,9 +40,9 @@ spec:
 apiVersion: getambassador.io/v2
 kind: Mapping
 metadata:
-  name: an-app-service
+  name: appservice
   namespace: default
 spec:
-  prefix: /app/
+  prefix: /
   service: appservice
 

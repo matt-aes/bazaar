@@ -6,14 +6,14 @@ from flask import Flask, Response
 from pathlib import Path
 
 # Configuration
-PORT = 5000
+PORT = 8080
 HOST =  "0.0.0.0"
 LOG_LEVEL = os.getenv("LOG_LEVEL", "DEBUG")
 
 # Globals
 flask_app     = Flask(__name__)
 script_path   = Path(os.getcwd())
-specs_path    = os.path.join(script_path.parent, 'data', "specs.json")
+specs_path    = os.path.join(script_path, 'data', "specs.json")
 
 # Load a specifications file from json.  Filename is given, load_specs fetches from data directory.
 def load_specs():
@@ -25,7 +25,7 @@ def load_specs():
 
 
 # The only GET route: given an aircraft model name, return the specifications.
-@flask_app.route('/specs/<model>')
+@flask_app.route('/<model>')
 def return_specification(model):
     if model in specs.keys():
         return Response(json.dumps(specs[model]),  mimetype='application/json')

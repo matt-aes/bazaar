@@ -18,7 +18,7 @@ spec:
       - name: pyservice
         image: brucehorn/service_preview-pyservice:latest
         ports:
-        - containerPort: 5000
+        - containerPort: 8080
 
 ---
 
@@ -32,14 +32,14 @@ spec:
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 5000
+      targetPort: 8080
 
 ---
 
 apiVersion: getambassador.io/v2
 kind: Mapping
 metadata:
-  name: a-python-service
+  name: pyservice
   namespace: default
 spec:
   prefix: /py/

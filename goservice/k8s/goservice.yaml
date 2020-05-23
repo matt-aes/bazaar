@@ -40,7 +40,7 @@ spec:
 apiVersion: getambassador.io/v2
 kind: Mapping
 metadata:
-  name: a-go-service
+  name: goservice
   namespace: default
 spec:
   prefix: /go/

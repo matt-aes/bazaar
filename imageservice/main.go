@@ -34,10 +34,10 @@ func main() {
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 
 	// Wire up the paths to their respective handlers
-	http.HandleFunc("/image/", imageServer)
+	http.HandleFunc("/", imageServer)
 
 	// Start listening
 	fmt.Println("listening at localhost:8080")
-	fmt.Println("Try http://localhost:8080/image/N567M")
+	fmt.Println("Try http://localhost:8080/N567M")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }

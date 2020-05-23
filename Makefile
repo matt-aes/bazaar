@@ -13,7 +13,7 @@ export
 #########################################################################
 
 # Phony targets for make: these are not files and will always run when invoked.
-.PHONY: build_images push_images
+.PHONY: build_images push_images build_specs
 all:    build_images push_images
 
 build_images:
@@ -46,3 +46,7 @@ deploy:
 	make -C imageservice     deploy
 	make -C appservice       deploy
 
+build_specs:
+	make -C specsservice     build_image
+	make -C specsservice     push_image
+	make -C specsservice     deploy

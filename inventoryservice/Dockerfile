@@ -10,4 +10,4 @@ RUN pip3 --no-cache-dir install -r requirements.txt
 
 # Expose port 5000 and launch the application
 EXPOSE 5000
-ENTRYPOINT ["python3", "src/service.py"]
+ENTRYPOINT ["python3", "service.py"]
