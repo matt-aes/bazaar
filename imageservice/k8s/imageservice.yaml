@@ -21,7 +21,8 @@ spec:
           image: docker.io/brucehorn/service_preview-imageservice:latest
           imagePullPolicy: Always
           ports:
-            - containerPort: 8080
+            - name: http
+              containerPort: 8080
 
 ---
 
@@ -35,7 +36,7 @@ spec:
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 8080
+      targetPort: http
 
 ---
 

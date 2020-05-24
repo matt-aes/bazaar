@@ -17,10 +17,12 @@ spec:
         app: inventoryapp
     spec:
       containers:
-      - name: inventoryservice
-        image: docker.io/brucehorn/service_preview-inventoryservice:latest
-        ports:
-        - containerPort: 8080
+        - name: inventoryservice
+          image: docker.io/brucehorn/service_preview-inventoryservice:latest
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8080
 
 ---
 
@@ -34,7 +36,7 @@ spec:
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 8080
+      targetPort: http
 
 ---
 

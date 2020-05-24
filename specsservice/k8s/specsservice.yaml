@@ -17,10 +17,12 @@ spec:
         app: specsapp
     spec:
       containers:
-      - name: specsservice
-        image: docker.io/brucehorn/service_preview-specsservice:latest
-        ports:
-        - containerPort: 8080
+        - name: specsservice
+          image: docker.io/brucehorn/service_preview-specsservice:latest
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8080
 
 ---
 
