@@ -8,6 +8,8 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
+	"golang.org/x/text/language"
+	"golang.org/x/text/message"
 	"html/template"
 	"io/ioutil"
 	"log"
@@ -19,11 +21,12 @@ import (
 
 // An individual aircraft, from inventoryservice/
 type Aircraft struct {
-	DetailURL    string
 	ImageURL     string `json: "imageUrl"`
 	Registration string `json: "registration"`
 	Model        string `json: "model"`
 	Price        int    `json: "price"`
+	DetailURL    string
+	LocalPrice   string
 }
 
 // Specifications for a given aircraft model, from specsservice/
@@ -56,10 +59,40 @@ type Detail struct {
 	Specs    Specification
 }
 
+// Local currency: USD, EUR, NOK
+var localCurrency = "EUR"
+
 // Page templates
 var templates = template.Must(template.ParseFiles(
 	"./static/html/home.html", "./static/html/results.html", "./static/html/detail.html"))
 
+// Convert from US dollars to a local currency
+func localizePrice(price int, currency string) string {
+	// Default: price as given
+	result := string(price)
+
+	switch currency {
+	case "USD":
+		// Price is initially in US Dollars
+		p := message.NewPrinter(language.English)
+		result = p.Sprintf("$%d", price)
+	case "EUR":
+		// Convert from Dollars to Euros; use German formatting.
+		exchangeRate :=  0.92 // USD to EUR
+		p := message.NewPrinter(language.German)
+		result = p.Sprintf("€%d", int(float64(price)/exchangeRate))
+	case "NOK":
+		// Convert from Dollars to Kroner; use Norwegian formatting.
+		exchangeRate := 10.29 // USD to NOK
+		p := message.NewPrinter(language.Norwegian)
+		result = p.Sprintf("%d kr", int(float64(price)*exchangeRate))
+
+	}
+
+	return result
+}
+
+// ========== Test code ==========
 type PersonalProfile struct {
 	Name    string
 	Hobbies []string
@@ -82,6 +115,7 @@ func testJsonResponse(w http.ResponseWriter, r *http.Request) {
 	w.Write(js)
 }
 
+// Home Page: show aircraft image and link to inventory
 func getHomePage(w http.ResponseWriter, r *http.Request) {
 	home := HomePage{
 		ResultsURL:    filepath.Join(r.Host, "results"),
@@ -94,6 +128,7 @@ func getHomePage(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// Results Page: list entire inventory
 func getResultsPage(w http.ResponseWriter, r *http.Request) {
 	res, err := http.Get("http://inventoryservice/all")
 	data, _ := ioutil.ReadAll(res.Body)
@@ -109,13 +144,15 @@ func getResultsPage(w http.ResponseWriter, r *http.Request) {
 	})
 
 	// Each aircraft has an ImageURL, but since we called the inventory service from inside
-	// the cluster we have to rewrite it based on the host in our request.
+	// the cluster we have to rewrite it based on the host in our request.  Also, convert the
+	// aircraft price to the local currency and format correctly.
 	for i, ac := range aircraft {
 		aircraft[i].ImageURL = filepath.Join(r.Host, "image", ac.Registration)
 		aircraft[i].DetailURL = filepath.Join(r.Host, "detail", ac.Registration)
+		aircraft[i].LocalPrice = localizePrice(ac.Price, localCurrency)
 	}
 
-	var results = &SearchResults{Title: "Aircraft Bazaar: Results", Items: aircraft}
+	var results = &SearchResults{Title: "Aircraft Bazaar: Our Inventory", Items: aircraft}
 
 	// Now, generate the page from the template.
 	err = templates.ExecuteTemplate(w, "results.html", results)
@@ -124,6 +161,7 @@ func getResultsPage(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// Detail Page: show the details of an individual aircraft
 func getDetailPage(w http.ResponseWriter, r *http.Request) {
 	// Get the registration number from the URL
 	registration := path.Base(r.URL.Path)
@@ -145,6 +183,9 @@ func getDetailPage(w http.ResponseWriter, r *http.Request) {
 	// Fix the imageURL so it will use our host path.
 	aircraft.ImageURL = filepath.Join(r.Host, "image", aircraft.Registration)
 
+	// Convert price to local currency.
+	aircraft.LocalPrice = localizePrice(aircraft.Price, localCurrency)
+
 	// Create the detail object to pass to the template.
 	title := fmt.Sprintf("Aircraft Bazaar: %s %s", aircraft.Model, aircraft.Registration)
 	detail := Detail{Title: title, Aircraft: aircraft, Specs: specs}
@@ -157,31 +198,14 @@ func getDetailPage(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func forwardHandler(w http.ResponseWriter, r *http.Request) {
-	log.Printf("/fwd => about to forward to python service")
-	res, err := http.Get("http://pyservice/hello")
 
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	data, _ := ioutil.ReadAll(res.Body)
-	defer res.Body.Close()
-
-	// Write to response
-	fmt.Fprintf(w, "pyservice/hello returned %d", res.StatusCode)
-	fmt.Fprintf(w, "\n  => %v", string(data))
-
-	log.Printf("     => finished writing to ResponseWriter")
-}
-
+// Main: Set up transport, http handlers, static file serving, anmd start the listener.
 func main() {
 	// For the demo, we can disable security checks.  Not normally recommended!
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 
 	// Wire up the paths to their respective handlers
-	http.HandleFunc("/fwd", forwardHandler)
-	http.HandleFunc("/getjson", testJsonResponse)
+	http.HandleFunc("/testjson", testJsonResponse)
 
 	http.HandleFunc("/", getHomePage)
 	http.HandleFunc("/results", getResultsPage)
