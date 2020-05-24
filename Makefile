@@ -13,7 +13,7 @@ export
 #########################################################################
 
 # Phony targets for make: these are not files and will always run when invoked.
-.PHONY: build_images push_images app image inventory
+.PHONY: build_images push_images app images inventory
 all:    build_images push_images
 
 build_images:

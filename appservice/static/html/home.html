@@ -2,9 +2,26 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Bjarne's Antique Aircraft Bazaar</title>
+    <title>Aircraft Bazaar: Home</title>
+    <style>
+        .center {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 80%;
+        }
+    </style>
 </head>
 <body>
+
+<h1 align="center">Welcome to the Aircraft Bazaar!</h1>
+<img src="https://{{- .TitleImageURL}}" class="center">
+<br>
+<hr>
+<h2 align="center"> Please specify the kind of aircraft that you are searching for:</h2>
+<br>
+<hr>
+<a href="https://{{- .ResultsURL}}"><h2 align="center">Go to the results!</h2></a>
 
 </body>
 </html>

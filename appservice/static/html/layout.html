@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ .Title }}</title>
+    <style>
+        table {
+            table-layout: fixed
+        }
+
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse
+        }
+
+        th, td {
+            padding: 4px;
+            text-align: left;
+            font-size: 24px;
+        }
+
+        table#specs tr:nth-child(even) {
+            background-color: #eee;
+        }
+
+        table#specs tr:nth-child(odd) {
+            background-color: #fff;
+        }
+
+        table#specs th {
+            background-color: black;
+            color: white;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Alon Ercoupe CF-NLX, asking price $16,000</h1>
+    <table>
+        <tr>
+            <th>
+                <img src="../../../imageservice/data/CF-NLX.jpg" width="800" height="600">
+            </th>
+            <th valign="top">
+                <table id="specs">
+                    <tr> <td>Aircraft Type</td> <td>Single</td> </tr>
+                    <tr> <td>Engine HP</td> <td>300</td> </tr>
+                    <tr> <td>Passenger Seats</td> <td>6</td> </tr>
+                    <tr> <td>Cruising Speed</td> <td>180</td> </tr>
+                    <tr> <td>Useful Load</td> <td>1200</td> </tr>
+                    <tr> <td>Range in NM</td> <td>800</td> </tr>
+                </table>
+            </th>
+        </tr>
+    </table>
+</body>
+</html>

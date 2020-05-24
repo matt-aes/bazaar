@@ -26,20 +26,26 @@ def load_inventory():
 
 @flask_app.route('/all')
 def return_all_inventory():
-    if True:
-        result = []
-        for registration, aircraft in inventory.items():
-            result.append(aircraft)
+    result = []
+    for registration, aircraft in inventory.items():
+        result.append(aircraft)
 
-        # Generate URL back to each aircraft's image and add it to each
-        # aircraft dictionary item.  Host_URL has a trailing slash.
-        host = request.host_url
-        for aircraft in result:
-            aircraft["imageUrl"] = f"{request.host_url}image/{aircraft['registration']}"
+    # Generate URL back to each aircraft's image and add it to each
+    # aircraft dictionary item.  Host_URL has a trailing slash.
+    host = request.host_url
+    for aircraft in result:
+        aircraft["imageUrl"] = f"{request.host_url}image/{aircraft['registration']}"
 
-        return Response(json.dumps(result),  mimetype='application/json')
+    return Response(json.dumps(result),  mimetype='application/json')
+
+@flask_app.route('/one/<registration>')
+def return_specific_item(registration):
+    if registration in inventory.keys():
+        aircraft = inventory[registration]
+        aircraft["imageUrl"] = f"{request.host_url}image/{aircraft['registration']}"
+        return Response(json.dumps(aircraft),  mimetype='application/json')
     else:
-        return "Inventory not available", 404
+        return "Aircraft not in inventory", 404
 
 if __name__ == '__main__':
     # Set up logging and run the server.

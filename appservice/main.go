@@ -12,15 +12,35 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"path"
+	"path/filepath"
 	"sort"
 )
 
-// An individual aircraft
+// An individual aircraft, from inventoryservice/
 type Aircraft struct {
-	ImageURL	 string
-	Registration string
-	Model        string
-	Price        int
+	DetailURL    string
+	ImageURL     string `json: "imageUrl"`
+	Registration string `json: "registration"`
+	Model        string `json: "model"`
+	Price        int    `json: "price"`
+}
+
+// Specifications for a given aircraft model, from specsservice/
+type Specification struct {
+	Model string `json: "model"`
+	Type  string `json: "type"`
+	HP    int    `json: "hp"`
+	Seats int    `json: "seats"`
+	Speed int    `json: "speed"`
+	Range int    `json: "range"`
+	Load  int    `json: "load"`
+}
+
+// The home page parameters to the home.html template.
+type HomePage struct {
+	ResultsURL    string
+	TitleImageURL string
 }
 
 // Result of an inventory search
@@ -29,21 +49,16 @@ type SearchResults struct {
 	Items []Aircraft
 }
 
-// Specifications for a given aircraft model
-type Specification struct {
-	Model string
-	Type  string
-	HP    int
-	Seats int
-	Speed int
-	Range int
-	Load  int
+// Particular aircraft with its specifications.
+type Detail struct {
+	Title    string
+	Aircraft Aircraft
+	Specs    Specification
 }
 
 // Page templates
 var templates = template.Must(template.ParseFiles(
-	"./static/html/edit.html", "./static/html/view.html", "./static/html/results.html",
-	"./static/html/home.html", "./static/html/detail.html"))
+	"./static/html/home.html", "./static/html/results.html", "./static/html/detail.html"))
 
 type PersonalProfile struct {
 	Name    string
@@ -67,15 +82,21 @@ func testJsonResponse(w http.ResponseWriter, r *http.Request) {
 	w.Write(js)
 }
 
+func getHomePage(w http.ResponseWriter, r *http.Request) {
+	home := HomePage{
+		ResultsURL:    filepath.Join(r.Host, "results"),
+		TitleImageURL: filepath.Join(r.Host, "static", "images", "staggerwing.jpg")}
+
+	err := templates.ExecuteTemplate(w, "home.html", home)
+
+	if err != nil {
+		log.Printf("template failed execution: %v", err)
+	}
+}
+
 func getResultsPage(w http.ResponseWriter, r *http.Request) {
 	res, err := http.Get("http://inventoryservice/all")
 	data, _ := ioutil.ReadAll(res.Body)
-
-	log.Printf("r.Host was %v", r.Host)
-	log.Printf("r.URL.Host was %v", r.URL.Host)
-	log.Printf("r.URL.Path was %v", r.URL.Path)
-	log.Printf("r.URL.EscapedPath() was %v", r.URL.EscapedPath())
-	log.Printf("r.URL.RequestURI() was %v", r.URL.RequestURI())
 
 	// We are returned a list of aircraft in JSON.  Create an array
 	// and unmarshal the data.
@@ -90,15 +111,49 @@ func getResultsPage(w http.ResponseWriter, r *http.Request) {
 	// Each aircraft has an ImageURL, but since we called the inventory service from inside
 	// the cluster we have to rewrite it based on the host in our request.
 	for i, ac := range aircraft {
-		aircraft[i].ImageURL = r.Host + "/image/" + ac.Registration
+		aircraft[i].ImageURL = filepath.Join(r.Host, "image", ac.Registration)
+		aircraft[i].DetailURL = filepath.Join(r.Host, "detail", ac.Registration)
 	}
 
-	var results = &SearchResults{Title: "Aircraft Matching Your Requirements", Items: aircraft}
+	var results = &SearchResults{Title: "Aircraft Bazaar: Results", Items: aircraft}
 
 	// Now, generate the page from the template.
 	err = templates.ExecuteTemplate(w, "results.html", results)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		log.Printf("template failed execution: %v", err)
+	}
+}
+
+func getDetailPage(w http.ResponseWriter, r *http.Request) {
+	// Get the registration number from the URL
+	registration := path.Base(r.URL.Path)
+
+	// Look up the individual aircraft from the inventory service
+	res, err := http.Get("http://inventoryservice/one/" + registration)
+	data, _ := ioutil.ReadAll(res.Body)
+
+	aircraft := Aircraft{}
+	json.Unmarshal(data, &aircraft)
+
+	// Look up the specifications from the specsservice
+	res, err = http.Get("http://specsservice/" + aircraft.Model)
+	data, _ = ioutil.ReadAll(res.Body)
+
+	specs := Specification{}
+	json.Unmarshal(data, &specs)
+
+	// Fix the imageURL so it will use our host path.
+	aircraft.ImageURL = filepath.Join(r.Host, "image", aircraft.Registration)
+
+	// Create the detail object to pass to the template.
+	title := fmt.Sprintf("Aircraft Bazaar: %s %s", aircraft.Model, aircraft.Registration)
+	detail := Detail{Title: title, Aircraft: aircraft, Specs: specs}
+
+	// Now, generate the page from the template.
+	err = templates.ExecuteTemplate(w, "detail.html", detail)
+
+	if err != nil {
+		log.Printf("template failed execution: %v", err)
 	}
 }
 
@@ -127,7 +182,14 @@ func main() {
 	// Wire up the paths to their respective handlers
 	http.HandleFunc("/fwd", forwardHandler)
 	http.HandleFunc("/getjson", testJsonResponse)
+
+	http.HandleFunc("/", getHomePage)
 	http.HandleFunc("/results", getResultsPage)
+	http.HandleFunc("/detail/", getDetailPage)
+
+	// Handle static assets (images primarily)
+	fs := http.FileServer(http.Dir("./static/"))
+	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	// Start listening
 	fmt.Println("listening at localhost:8080")

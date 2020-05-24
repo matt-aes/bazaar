@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{{ .Model }} {{ .Registration }}</title>
-
+    <title>{{ .Title }}</title>
     <style>
         table {
             table-layout: fixed
@@ -32,11 +31,26 @@
             background-color: black;
             color: white;
         }
-
     </style>
 </head>
 <body>
-
-
+<h1>{{.Aircraft.Model}} {{.Aircraft.Registration}}, asking price ${{.Aircraft.Price}}</h1>
+<table>
+    <tr>
+        <th>
+            <img src="https://{{.Aircraft.ImageURL}}" width="800" height="600">
+        </th>
+        <th valign="top">
+            <table id="specs">
+                <tr> <td>Aircraft Type</td> <td>{{.Specs.Type}}</td> </tr>
+                <tr> <td>Engine</td> <td>{{.Specs.HP}} HP</td> </tr>
+                <tr> <td>Passenger Seats</td> <td>{{.Specs.Seats}}</td> </tr>
+                <tr> <td>Cruising Speed</td> <td>{{.Specs.Speed}} kts</td> </tr>
+                <tr> <td>Useful Load</td> <td>{{.Specs.Load}} lbs</td> </tr>
+                <tr> <td>Range</td> <td>{{.Specs.Range}} nm</td> </tr>
+            </table>
+        </th>
+    </tr>
+</table>
 </body>
 </html>
