@@ -11,6 +11,8 @@ spec:
       app: mainapp
   template:
     metadata:
+      annotations:
+        getambassador.io/inject-traffic-agent: enabled
       labels:
         app: mainapp
     spec:

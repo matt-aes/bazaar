@@ -1,5 +1,5 @@
 SHELL             := /usr/bin/env bash
-DEV_REGISTRY      ?= docker.io
+DEV_REGISTRY      ?= docker.io  # docker.io/alexgervais
 DOCKER_USER       ?= brucehorn
 PROJECT_NAME      ?= service_preview
 DOCKER_REPO       ?= $(DEV_REGISTRY)/$(DOCKER_USER)/$(PROJECT_NAME)
