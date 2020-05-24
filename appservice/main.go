@@ -60,7 +60,7 @@ type Detail struct {
 }
 
 // Local currency: USD, EUR, NOK
-var localCurrency = "USD"
+var localCurrency = "EUR"
 
 // Page templates
 var templates = template.Must(template.ParseFiles(
@@ -80,7 +80,7 @@ func localizePrice(price int, currency string) string {
 		// Convert from Dollars to Euros; use German formatting.
 		exchangeRate :=  0.92 // USD to EUR
 		p := message.NewPrinter(language.German)
-		result = p.Sprintf("€%d", int(float64(price)/exchangeRate))
+		result = p.Sprintf("€%d", int(float64(price)*exchangeRate))
 	case "NOK":
 		// Convert from Dollars to Kroner; use Norwegian formatting.
 		exchangeRate := 10.29 // USD to NOK

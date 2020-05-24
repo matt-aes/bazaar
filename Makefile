@@ -30,7 +30,7 @@ push_images: build_images
 	make -C inventoryservice  push_image
 	make -C imageservice      push_image
 	make -C appservice        push_image
-	@echo ">>> images pushed! You can 'make deploy' (or 'redeploy') now."
+	@echo ">>> images pushed! You can 'make deploy' now."
 
 # Deploy all services once images have been built.
 deploy:
@@ -39,6 +39,10 @@ deploy:
 	make -C inventoryservice deploy
 	make -C imageservice     deploy
 	make -C appservice       deploy
+	@echo ""
+	@echo ">>> applying the traffic manager and configuring RBAC..."
+	kubectl apply -f k8s/traffic-manager.yaml
+	kubectl apply -f k8s/traffic-agent-rbac.yaml
 
 # Build, push, deploy individual services.
 app:
