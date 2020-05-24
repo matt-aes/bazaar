@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: inventoryservice
-        image: brucehorn/service_preview-inventoryservice:latest
+        image: docker.io/brucehorn/service_preview-inventoryservice:latest
         ports:
         - containerPort: 8080
 

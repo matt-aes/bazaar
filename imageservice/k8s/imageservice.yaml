@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: imageservice
-          image: brucehorn/service_preview-imageservice:latest
+          image: docker.io/brucehorn/service_preview-imageservice:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8080

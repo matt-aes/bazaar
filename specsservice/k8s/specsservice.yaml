@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: specsservice
-        image: brucehorn/service_preview-specsservice:latest
+        image: docker.io/brucehorn/service_preview-specsservice:latest
         ports:
         - containerPort: 8080
 

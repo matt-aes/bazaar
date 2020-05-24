@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: appservice
-          image: brucehorn/service_preview-appservice:latest
+          image: docker.io/brucehorn/service_preview-appservice:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
