@@ -119,7 +119,7 @@ func testJsonResponse(w http.ResponseWriter, r *http.Request) {
 func getHomePage(w http.ResponseWriter, r *http.Request) {
 	home := HomePage{
 		ResultsURL:    filepath.Join(r.Host, "results"),
-		TitleImageURL: filepath.Join(r.Host, "static", "images", "staggerwing.jpg")}
+		TitleImageURL: filepath.Join(r.Host, "static", "images", "B17-Staggerwing.jpg")}
 
 	err := templates.ExecuteTemplate(w, "home.html", home)
 
