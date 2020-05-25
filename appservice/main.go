@@ -181,7 +181,7 @@ func getDetailPage(w http.ResponseWriter, r *http.Request) {
 	json.Unmarshal(data, &specs)
 
 	// Fix the imageURL so it will use our host path.
-	aircraft.ImageURL = filepath.Join("image", aircraft.Registration)
+	aircraft.ImageURL = filepath.Join("..", "image", aircraft.Registration)
 
 	// Convert price to local currency.
 	aircraft.LocalPrice = localizePrice(aircraft.Price, localCurrency)
