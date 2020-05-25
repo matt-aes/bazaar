@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: appservice
   labels:
-    app: appservice
+    app: mainapp
 spec:
   replicas: 1
   selector:
