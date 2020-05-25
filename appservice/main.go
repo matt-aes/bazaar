@@ -118,8 +118,8 @@ func testJsonResponse(w http.ResponseWriter, r *http.Request) {
 // Home Page: show aircraft image and link to inventory
 func getHomePage(w http.ResponseWriter, r *http.Request) {
 	home := HomePage{
-		ResultsURL:    filepath.Join(r.Host, "results"),
-		TitleImageURL: filepath.Join(r.Host, "static", "images", "B17-Staggerwing.jpg")}
+		ResultsURL:    filepath.Join("results"),
+		TitleImageURL: filepath.Join("static", "images", "B17-Staggerwing.jpg")}
 
 	err := templates.ExecuteTemplate(w, "home.html", home)
 
@@ -147,8 +147,8 @@ func getResultsPage(w http.ResponseWriter, r *http.Request) {
 	// the cluster we have to rewrite it based on the host in our request.  Also, convert the
 	// aircraft price to the local currency and format correctly.
 	for i, ac := range aircraft {
-		aircraft[i].ImageURL = filepath.Join(r.Host, "image", ac.Registration)
-		aircraft[i].DetailURL = filepath.Join(r.Host, "detail", ac.Registration)
+		aircraft[i].ImageURL = filepath.Join("image", ac.Registration)
+		aircraft[i].DetailURL = filepath.Join("detail", ac.Registration)
 		aircraft[i].LocalPrice = localizePrice(ac.Price, localCurrency)
 	}
 
@@ -181,7 +181,7 @@ func getDetailPage(w http.ResponseWriter, r *http.Request) {
 	json.Unmarshal(data, &specs)
 
 	// Fix the imageURL so it will use our host path.
-	aircraft.ImageURL = filepath.Join(r.Host, "image", aircraft.Registration)
+	aircraft.ImageURL = filepath.Join("image", aircraft.Registration)
 
 	// Convert price to local currency.
 	aircraft.LocalPrice = localizePrice(aircraft.Price, localCurrency)
