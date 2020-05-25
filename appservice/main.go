@@ -115,6 +115,13 @@ func testJsonResponse(w http.ResponseWriter, r *http.Request) {
 	w.Write(js)
 }
 
+func doGet(r *http.Request, url string) (*http.Response, error) {
+	req, err := http.NewRequest("GET", url, nil)
+	req.Header.Add("x-service-preview", r.Header.Get("x-service-preview"))
+	res, err := http.DefaultClient.Do(req)
+	return res, err
+}
+
 // Home Page: show aircraft image and link to inventory
 func getHomePage(w http.ResponseWriter, r *http.Request) {
 	home := HomePage{
@@ -130,7 +137,7 @@ func getHomePage(w http.ResponseWriter, r *http.Request) {
 
 // Results Page: list entire inventory
 func getResultsPage(w http.ResponseWriter, r *http.Request) {
-	res, err := http.Get("http://inventoryservice/all")
+	res, err := doGet(r, "http://inventoryservice/all")
 	data, _ := ioutil.ReadAll(res.Body)
 
 	// We are returned a list of aircraft in JSON.  Create an array
@@ -167,14 +174,14 @@ func getDetailPage(w http.ResponseWriter, r *http.Request) {
 	registration := path.Base(r.URL.Path)
 
 	// Look up the individual aircraft from the inventory service
-	res, err := http.Get("http://inventoryservice/one/" + registration)
+	res, err := doGet(r, "http://inventoryservice/one/" + registration)
 	data, _ := ioutil.ReadAll(res.Body)
 
 	aircraft := Aircraft{}
 	json.Unmarshal(data, &aircraft)
 
 	// Look up the specifications from the specsservice
-	res, err = http.Get("http://specsservice/" + aircraft.Model)
+	res, err = doGet(r, "http://specsservice/" + aircraft.Model)
 	data, _ = ioutil.ReadAll(res.Body)
 
 	specs := Specification{}
