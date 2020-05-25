@@ -1,0 +1,9 @@
+apiVersion: getambassador.io/v2
+kind: Host
+metadata:
+  name: gallant-liskov-6589.edgestack.me
+spec:
+  hostname: gallant-liskov-6589.edgestack.me
+  acmeProvider:
+    email: bruce@datawire.io
+  previewURL: enabled
