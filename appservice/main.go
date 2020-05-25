@@ -1,7 +1,3 @@
-// Copyright 2010 The Go Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
 package main
 
 import (
@@ -60,7 +56,7 @@ type Detail struct {
 }
 
 // Local currency: USD, EUR, NOK
-var localCurrency = "EUR"
+var localCurrency = "NOK"
 
 // Page templates
 var templates = template.Must(template.ParseFiles(
@@ -126,7 +122,7 @@ func doGet(r *http.Request, url string) (*http.Response, error) {
 func getHomePage(w http.ResponseWriter, r *http.Request) {
 	home := HomePage{
 		ResultsURL:    filepath.Join("results"),
-		TitleImageURL: filepath.Join("static", "images", "B17-Staggerwing.jpg")}
+		TitleImageURL: filepath.Join("static", "images", "DHC2-Beaver.jpg")}
 
 	err := templates.ExecuteTemplate(w, "home.html", home)
 

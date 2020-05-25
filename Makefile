@@ -40,7 +40,7 @@ deploy:
 	make -C imageservice     deploy
 	make -C appservice       deploy
 	@echo ""
-	@echo ">>> applying the traffic manager and configuring RBAC..."
+	@echo ">>> configuring RBAC..."
 	kubectl apply -f k8s/traffic-agent-rbac.yaml
 
 # Build, push, deploy individual services.

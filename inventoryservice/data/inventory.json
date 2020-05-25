@@ -48,5 +48,15 @@
     "registration": "N818Y",
     "model": "Piper Twin Comanche",
     "price": 72000
+  },
+    {
+    "registration": "G-HAIG",
+    "model": "Rutan Long-EZ",
+    "price": 77000
+  },
+  {
+    "registration": "HR-ATQ",
+    "model": "Rutan Long-EZ",
+    "price": 109000
   }
 ]

@@ -6,7 +6,7 @@ from flask import Flask, Response
 from pathlib import Path
 
 # Configuration
-PORT = 8080
+PORT = 8081
 HOST =  "0.0.0.0"
 LOG_LEVEL = os.getenv("LOG_LEVEL", "DEBUG")
 
