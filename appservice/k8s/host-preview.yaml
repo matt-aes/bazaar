@@ -2,6 +2,7 @@ apiVersion: getambassador.io/v2
 kind: Host
 metadata:
   name: gallant-liskov-6589.edgestack.me
+  namespace: ambassador
 spec:
   hostname: gallant-liskov-6589.edgestack.me
   acmeProvider:
