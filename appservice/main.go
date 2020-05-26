@@ -4,8 +4,6 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
-	"golang.org/x/text/language"
-	"golang.org/x/text/message"
 	"html/template"
 	"io/ioutil"
 	"log"
@@ -13,6 +11,9 @@ import (
 	"path"
 	"path/filepath"
 	"sort"
+
+	"golang.org/x/text/language"
+	"golang.org/x/text/message"
 )
 
 // An individual aircraft, from inventoryservice/
@@ -50,9 +51,9 @@ type SearchResults struct {
 
 // Particular aircraft with its specifications.
 type Detail struct {
-	Title    string
-	Aircraft Aircraft
-	Specs    Specification
+	Title      string
+	Aircraft   Aircraft
+	Specs      Specification
 }
 
 // Local currency: USD, EUR, NOK
@@ -74,7 +75,7 @@ func localizePrice(price int, currency string) string {
 		result = p.Sprintf("$%d", price)
 	case "EUR":
 		// Convert from Dollars to Euros; use German formatting.
-		exchangeRate :=  0.92 // USD to EUR
+		exchangeRate := 0.92 // USD to EUR
 		p := message.NewPrinter(language.German)
 		result = p.Sprintf("€%d", int(float64(price)*exchangeRate))
 	case "NOK":
@@ -170,14 +171,14 @@ func getDetailPage(w http.ResponseWriter, r *http.Request) {
 	registration := path.Base(r.URL.Path)
 
 	// Look up the individual aircraft from the inventory service
-	res, err := doGet(r, "http://inventoryservice/one/" + registration)
+	res, err := doGet(r, "http://inventoryservice/one/"+registration)
 	data, _ := ioutil.ReadAll(res.Body)
 
 	aircraft := Aircraft{}
 	json.Unmarshal(data, &aircraft)
 
 	// Look up the specifications from the specsservice
-	res, err = doGet(r, "http://specsservice/" + aircraft.Model)
+	res, err = doGet(r, "http://specsservice/"+aircraft.Model)
 	data, _ = ioutil.ReadAll(res.Body)
 
 	specs := Specification{}
@@ -200,7 +201,6 @@ func getDetailPage(w http.ResponseWriter, r *http.Request) {
 		log.Printf("template failed execution: %v", err)
 	}
 }
-
 
 // Main: Set up transport, http handlers, static file serving, anmd start the listener.
 func main() {
