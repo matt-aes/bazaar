@@ -37,26 +37,52 @@ appservice [requests inventory from] ==> ```inventoryservice``` [returns list of
 
 ## How to run the Service Preview demo
 
+Install the Ambassador Edge Stack:
 
-`edgectl install`                         # Install the Ambassador Edge Stack
-`edgectl license <license key here>`      # Apply the license, required for edgectl intercept.
+`edgectl install`
 
-`make all`                                # Create the Docker images for all services and push to Docker Hub
-`make deploy`                             # Apply the service YAML files and the traffic agent RBAC
+Apply the license, required for edgectl intercept.
 
-`kubectl get pods`                        # See all the running pods
-`kubectl describe pod appservice...`      # The appservice should run with the traffic-agent sidecar
-`kubectl describe deployment appservice...`
+`edgectl license <license key here>`
+
+Create the Docker images for all services and push to Docker Hub
+
+`make all`
+
+Apply the service YAML files and the traffic agent RBAC
+
+`make deploy`
+
+See all the running pods
+
+`kubectl get pods`
+
+The appservice should run with the traffic-agent sidecar
+
+`kubectl describe pod <appservice pod UID here>`
+
+`kubectl describe deployment <appservice pod UID here>`
+
+Start the edgectl daemon, needed for the client side to connect to the cluster.
 
 `edgectl daemon`
 
+Connect to the cluster and check its status.  The proxy should be ON.
+
 `edgectl connect`
 `edgectl status`
+
+List the available intercepts.  These are the deployed services.
+
 `edgectl intercept available`
 
 Now, launch your local services so that when they are intercepted by AES and sent to your localhost, they
 will provide the services that are currently running in the cloud.
+
 `edgectl intercept add appservice -t localhost:8080`
+
 `edgectl intercept add specsservice -t localhost:8081`
+
 `edgectl intercept add inventoryservice -t localhost:8082`
+
 
