@@ -57,7 +57,7 @@ type Detail struct {
 }
 
 // Local currency: USD, EUR, NOK
-var localCurrency = "NOK"
+var localCurrency = "USD"
 
 // Page templates
 var templates = template.Must(template.ParseFiles(
