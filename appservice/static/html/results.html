@@ -3,36 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ .Title }}</title>
-<style>
-    table {
-        table-layout: fixed
-    }
+    <style>
+        table {
+            table-layout: fixed
+        }
 
-    table, th, td {
-        border: 1px solid black;
-        border-collapse: collapse
-    }
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse
+        }
 
-    th, td {
-        padding: 4px;
-        text-align: left;
-        font-size: 24px;
-    }
+        th, td {
+            padding: 4px;
+            text-align: left;
+            font-size: 24px;
+        }
 
-    table#result tr:nth-child(even) {
-        background-color: #eee;
-    }
+        table#result tr:nth-child(even) {
+            background-color: #eee;
+        }
 
-    table#result tr:nth-child(odd) {
-        background-color: #fff;
-    }
+        table#result tr:nth-child(odd) {
+            background-color: #fff;
+        }
 
-    table#result th {
-        background-color: black;
-        color: white;
-    }
+        table#result th {
+            background-color: black;
+            color: white;
+        }
 
-</style>
+        .ad {
+            color: #C0C0C0;
+            font-style: italic;
+        }
+    </style>
 </head>
 <body>
 
@@ -55,5 +59,9 @@
 {{end}}
 
 </table>
+<br>
+<br>
+<h3  align="center" class="ad">This is a demo of the <a href="https://www.getambassador.io/docs/latest/topics/using/edgectl/" class="ad">Service Preview</a> feature of the <a href="https://www.getambassador.io/" class="ad">Ambassador Edge Stack</a> by <a href="https://www.datawire.io/" class="ad">Datawire</a>.</h3>
+
 </body>
 </html>
