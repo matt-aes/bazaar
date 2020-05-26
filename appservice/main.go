@@ -89,29 +89,7 @@ func localizePrice(price int, currency string) string {
 	return result
 }
 
-// ========== Test code ==========
-type PersonalProfile struct {
-	Name    string
-	Hobbies []string
-}
-
-func testJsonResponse(w http.ResponseWriter, r *http.Request) {
-	log.Printf("/testJsonHandler => a cool json structure")
-
-	profile := PersonalProfile{"Bruce", []string{"flying", "telemark skiing", "travel", "running"}}
-
-	// Return Json: marshal the struct.
-	js, err := json.Marshal(profile)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	// Tell the client that the content type is json
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(js)
-}
-
+// Helper function to make a request and preserve the x-service-preview header.
 func doGet(r *http.Request, url string) (*http.Response, error) {
 	req, err := http.NewRequest("GET", url, nil)
 	req.Header.Add("x-service-preview", r.Header.Get("x-service-preview"))
@@ -208,8 +186,6 @@ func main() {
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 
 	// Wire up the paths to their respective handlers
-	http.HandleFunc("/testjson", testJsonResponse)
-
 	http.HandleFunc("/", getHomePage)
 	http.HandleFunc("/results", getResultsPage)
 	http.HandleFunc("/detail/", getDetailPage)

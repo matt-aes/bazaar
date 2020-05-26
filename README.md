@@ -33,3 +33,30 @@ The ```results.html``` page, served up by the appservice, requires two other ser
 ```inventoryservice``` and the ```imageservice```.
 
 appservice [requests inventory from] ==> ```inventoryservice``` [returns list of aircraft]
+
+
+## How to run the Service Preview demo
+
+
+`edgectl install`                         # Install the Ambassador Edge Stack
+`edgectl license <license key here>`      # Apply the license, required for edgectl intercept.
+
+`make all`                                # Create the Docker images for all services and push to Docker Hub
+`make deploy`                             # Apply the service YAML files and the traffic agent RBAC
+
+`kubectl get pods`                        # See all the running pods
+`kubectl describe pod appservice...`      # The appservice should run with the traffic-agent sidecar
+`kubectl describe deployment appservice...`
+
+`edgectl daemon`
+
+`edgectl connect`
+`edgectl status`
+`edgectl intercept available`
+
+Now, launch your local services so that when they are intercepted by AES and sent to your localhost, they
+will provide the services that are currently running in the cloud.
+`edgectl intercept add appservice -t localhost:8080`
+`edgectl intercept add specsservice -t localhost:8081`
+`edgectl intercept add inventoryservice -t localhost:8082`
+

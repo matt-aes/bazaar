@@ -43,6 +43,7 @@ def return_specific_item(registration):
     if registration in inventory.keys():
         aircraft = inventory[registration]
         aircraft["imageUrl"] = f"{request.host_url}image/{aircraft['registration']}"
+
         return Response(json.dumps(aircraft),  mimetype='application/json')
     else:
         return "Aircraft not in inventory", 404
