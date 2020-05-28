@@ -14,7 +14,7 @@ There are four services:
 - and a Specs service (`specsservice`, written in Python), which, given an aircraft model, returns that aircraft's specifications
 
 Each service is a Kubernetes Service with a Deployment, and routing to each Service is
-done through an Ambassador Mapping Resource.  Communication between Services is via JSON.
+done through an Ambassador Mapping Resource.  Communication between Services is via `json`.
 
 The Image, Inventory and Specs services provide a database-style lookup of images, individual aircraft information,
 and specifications for each model of aircraft in the inventory.  To make the demo source as simple as possible,
@@ -22,7 +22,10 @@ this information is stored directly in each service in a `data` directory.  In t
 individual aircraft images are stored as `.jpg` files where each file's name matches that aircraft's registration.
 In the Inventory and Specs services, the information is stored in individual `json` files, `data/inventory.json` and
 `data/specs.json` respectively. These files are read in at startup time and the values returned as `json` when the service
-handles a request.
+handles a request.  These `json` structures are unmarshalled into structs defined in the Application service code; any
+changes that are made in the Inventory or Specs services that modify the result format will need to have those
+changes reflected in the Application service struct definitions.  Other solutions to this problem, such as
+the use of protocol buffers, would have been overly complex for the needs of this demo.
 
 ## Application Flow
 
@@ -30,26 +33,54 @@ The appservice is responsible for communicating with the other services and rend
 template system.  The pages are:
 
 - `home.html`, the landing page for the site;
-- `results.html`, the inventory list with a thumbnail of each aircraft and some basic information;
+- `inventory.html`, the inventory list with a thumbnail of each aircraft and some basic information;
 - `detail.html`, a detail page on a single aircraft, with a photo and specifications for that aircraft model.
 
 Rendering the Home page simply lays out "Welcome to the Aircraft Bazaar", and requests a static image that is
 served from the `appservice` itself using the `http.FileServer` module.  A link at the bottom navigates to the
-`results.html` page.
+`inventory.html` page.
 
 ## Inventory Page
 
 The `inventory.html` page, served up by the `appservice`, requires two other services to render its content: the
-`inventoryservice` and the `imageservice`.
+`inventoryservice` and the `imageservice`.  The `inventoryservice` returns a list of `json` entries that are mapped
+to a list of `Aircraft` objects stored in an `InventoryResults` structure.  these structs are defined by the
+`appservice` in `appservice/main.go`.
+
+Once the `appservice` has the list of `Aircraft`, it sorts them by asking price (low to high) and sets the
+`ImageURL`, `DetailURL`, and localized price--US Dollars, Euros, or Norwegian Kroner--for each of the aircraft in
+the list.  The price is stored as US Dollars and converted by the `localizePrice` function which returns a price
+string with the appropriate currency symbol and formatting.  Then the `inventory.html` template is executed with
+the `InventoryResults` structure and returned as the response.
 
 ## Detail Page
 
-The `detail.html` page, served up by the `appservice`, requires two other services to render its content: the
-`specsservice` and the `imageservice`.
+The `detail.html` page, served up by the `appservice`, requires three other services to render its content: the
+`inventoryservice`, the `specsservice` and the `imageservice`.  The `inventoryservice` returns the data for the individual
+aircraft being displayed (the registration number, model name, and price).  Once the model name is known, the specifications
+for that particular model (type, hp, seats, speed, range, and load) are requested from the `specsservice`.  As
+with the Inventory page, the appservice generates a URL for the html page that is returned that points to the
+specific image resource; the `imageservice` then returns that aircraft's image when requested by the browser.
+
 
 ## How to run the Service Preview demo
 
-### Customizing to your environment
+If you haven't already, get the source code for Service Preview:
+
+`git@github.com:datawire/service-preview-demo.git`
+
+
+### Install AES in your cluster
+
+Install the Ambassador Edge Stack:
+
+`edgectl install`
+
+Apply the license, required for `edgectl intercept`.
+
+`edgectl license <license key here>`
+
+### Customize the Makefile to your environment
 
 The toplevel `Makefile` (`service-preview-demo/Makefile`) has a number of functions:
 
@@ -78,16 +109,6 @@ Two environment variables specify your Docker registry and project name, and can
 - `$DEV_REGISTRY` defaults to `docker.io/brucehorn` but is overridden if defined in the environment.
 
 - `$PROJECT_NAME` defaults to `service_preview`, and can also be overridden if otherwise defined.
-
-### Installing AES
-
-Install the Ambassador Edge Stack:
-
-`edgectl install`
-
-Apply the license, required for `edgectl intercept`.
-
-`edgectl license <license key here>`
 
 ### Building and Deploying
 
