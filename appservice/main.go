@@ -39,12 +39,12 @@ type Specification struct {
 
 // The home page parameters to the home.html template.
 type HomePage struct {
-	ResultsURL    string
+	InventoryURL  string
 	TitleImageURL string
 }
 
 // Result of an inventory search
-type SearchResults struct {
+type InventoryResults struct {
 	Title string
 	Items []Aircraft
 }
@@ -61,7 +61,7 @@ var localCurrency = "USD"
 
 // Page templates
 var templates = template.Must(template.ParseFiles(
-	"./static/html/home.html", "./static/html/results.html", "./static/html/detail.html"))
+	"./static/html/home.html", "./static/html/inventory.html", "./static/html/detail.html"))
 
 // Convert from US dollars to a local currency
 func localizePrice(price int, currency string) string {
@@ -100,7 +100,7 @@ func doGet(r *http.Request, url string) (*http.Response, error) {
 // Home Page: show aircraft image and link to inventory
 func getHomePage(w http.ResponseWriter, r *http.Request) {
 	home := HomePage{
-		ResultsURL:    filepath.Join("results"),
+		InventoryURL:  filepath.Join("inventory"),
 		TitleImageURL: filepath.Join("static", "images", "DHC2-Beaver.jpg")}
 
 	err := templates.ExecuteTemplate(w, "home.html", home)
@@ -110,8 +110,8 @@ func getHomePage(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// Results Page: list entire inventory
-func getResultsPage(w http.ResponseWriter, r *http.Request) {
+// Inventory Page: list entire inventory
+func getInventoryPage(w http.ResponseWriter, r *http.Request) {
 	res, err := doGet(r, "http://inventoryservice/all")
 	data, _ := ioutil.ReadAll(res.Body)
 
@@ -134,10 +134,10 @@ func getResultsPage(w http.ResponseWriter, r *http.Request) {
 		aircraft[i].LocalPrice = localizePrice(ac.Price, localCurrency)
 	}
 
-	var results = &SearchResults{Title: "Aircraft Bazaar: Our Inventory", Items: aircraft}
+	var inventory = &InventoryResults{Title: "Aircraft Bazaar: Our Inventory", Items: aircraft}
 
 	// Now, generate the page from the template.
-	err = templates.ExecuteTemplate(w, "results.html", results)
+	err = templates.ExecuteTemplate(w, "inventory.html", inventory)
 	if err != nil {
 		log.Printf("template failed execution: %v", err)
 	}
@@ -187,7 +187,7 @@ func main() {
 
 	// Wire up the paths to their respective handlers
 	http.HandleFunc("/", getHomePage)
-	http.HandleFunc("/results", getResultsPage)
+	http.HandleFunc("/inventory", getInventoryPage)
 	http.HandleFunc("/detail/", getDetailPage)
 
 	// Handle static assets (images primarily)
@@ -196,6 +196,6 @@ func main() {
 
 	// Start listening
 	fmt.Println("listening at localhost:8080")
-	fmt.Println("Try http://localhost:8080/results")
+	fmt.Println("Try http://localhost:8080/inventory")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }

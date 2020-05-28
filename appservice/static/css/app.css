@@ -1,0 +1,46 @@
+@charset "UTF-8";
+
+table {
+    table-layout: fixed
+}
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse
+}
+
+th, td {
+    padding: 4px;
+    text-align: left;
+    font-size: 24px;
+}
+
+table#specs tr:nth-child(even) {
+    background-color: #eee;
+}
+
+table#specs tr:nth-child(odd) {
+    background-color: #fff;
+}
+
+table#specs th {
+    background-color: black;
+    color: white;
+}
+
+table#result th {
+    background-color: black;
+    color: white;
+}
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+}
+
+.ad {
+    color: #C0C0C0;
+    font-style: italic;
+}

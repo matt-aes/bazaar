@@ -3,40 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ .Title }}</title>
-    <style>
-        table {
-            table-layout: fixed
-        }
-
-        table, th, td {
-            border: 1px solid black;
-            border-collapse: collapse
-        }
-
-        th, td {
-            padding: 4px;
-            text-align: left;
-            font-size: 24px;
-        }
-
-        table#specs tr:nth-child(even) {
-            background-color: #eee;
-        }
-
-        table#specs tr:nth-child(odd) {
-            background-color: #fff;
-        }
-
-        table#specs th {
-            background-color: black;
-            color: white;
-        }
-
-        .ad {
-            color: #C0C0C0;
-            font-style: italic;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="../static/css/app.css">
 </head>
 <body>
 <h1>{{.Aircraft.Model}} {{.Aircraft.Registration}}, asking price {{.Aircraft.LocalPrice}}</h1>
