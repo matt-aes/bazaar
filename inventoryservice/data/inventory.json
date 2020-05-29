@@ -1,62 +1,57 @@
 [
   {
-    "registration": "N567M",
+    "registration": "CS-260",
     "model": "Beechcraft Bonanza",
     "price": 73000
   },
   {
-    "registration": "N8880S",
+    "registration": "ART-201",
     "model": "Beechcraft Bonanza",
     "price": 52000
   },
   {
-    "registration": "N8204T",
+    "registration": "GEN-22",
     "model": "Cessna 180",
     "price": 38000
   },
   {
-    "registration": "G-BTSM",
+    "registration": "STAT-302",
     "model": "Cessna 180",
     "price": 54000
   },
   {
-    "registration": "CF-NLX",
+    "registration": "PHY-356",
     "model": "Alon Ercoupe",
     "price": 14000
   },
   {
-    "registration": "CF-LUN",
+    "registration": "MAT-522",
     "model": "Alon Ercoupe",
     "price": 18000
   },
   {
-    "registration": "D-ICHO",
+    "registration": "ENG-101",
     "model": "Cessna Skymaster",
     "price": 92000
   },
   {
-    "registration": "CS-AUX",
+    "registration": "CS-212",
     "model": "Cessna Skymaster",
     "price": 110000
   },
   {
-    "registration": "C-FQPK",
+    "registration": "BIO-206",
     "model": "Piper Twin Comanche",
     "price": 80000
   },
   {
-    "registration": "N818Y",
+    "registration": "CSE-373",
     "model": "Piper Twin Comanche",
     "price": 72000
   },
     {
-    "registration": "G-HAIG",
+    "registration": "PSY-210",
     "model": "Rutan Long-EZ",
     "price": 77000
-  },
-  {
-    "registration": "HR-ATQ",
-    "model": "Rutan Long-EZ",
-    "price": 109000
   }
 ]
