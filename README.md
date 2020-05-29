@@ -82,7 +82,8 @@ Apply the license, required for `edgectl intercept`.
 
 ### Customize the Makefile to your environment
 
-The toplevel `Makefile` (`service-preview-demo/Makefile`) has a number of functions:
+The toplevel `Makefile` (`service-preview-demo/Makefile`) has a number of functions, some of which simply call
+service `Makefiles` in their respective subdirectories.
 
 - `make build-images` builds the images for each of the services
 
@@ -93,9 +94,10 @@ The toplevel `Makefile` (`service-preview-demo/Makefile`) has a number of functi
 - `make all` builds and pushes all the images to the repository but does not deploy the services.
 
 You may also build and push individual service images:
+
 - `make app` builds and pushes the Application Docker image (code, `html` and `css` files)
-- `make inventory` builds and pushes the Inventory Docker image (code and related `json` data)
-- `make specs` builds and pushes the Specs Docker image (code and related `json` data)
+- `make inventory` builds and pushes the Inventory Docker image (code and `json` data)
+- `make specs` builds and pushes the Specs Docker image (code and `json` data)
 - `make images` builds and pushes the Image service Docker image (code and `jpeg` files)
 
 These are used when you have modified one of the services and want to run those changes in the cluster.
@@ -112,25 +114,27 @@ Two environment variables specify your Docker registry and project name, and can
 
 ### Building and Deploying
 
-Create the Docker images for all services, and push the images to Docker Hub.  You will want to 
+Create the Docker images for all services, and push the images to the repository.  First set the
+$DEV_REGISTRY environment variable to point to your preferred Docker repo, then
 
 `make all`
 
-Apply the service YAML files and the traffic agent RBAC
+Deploy the application by `kubectl apply`'ing the service YAML files and the traffic agent RBAC.
 
 `make deploy`
 
-See all the running pods
+View all the pods, showing the services are being deployed, creating containers, or running.
 
 `kubectl get pods`
 
-The appservice should run with the traffic-agent sidecar
+Each service should run with a `traffic-agent` sidecar, so when you describe a pod you should see both the
+name of the service for that pod, and the `traffic-agent`.
 
 `kubectl describe pod <appservice pod UID here>`
 
 `kubectl describe deployment <appservice pod UID here>`
 
-Start the edgectl daemon, needed for the client side to connect to the cluster.
+Once all the pods are up and running, start the `edgectl daemon`, needed for the client to connect to the cluster.
 
 `edgectl daemon`
 
@@ -139,12 +143,13 @@ Connect to the cluster and check its status.  The proxy should be ON.
 `edgectl connect`
 `edgectl status`
 
-List the available intercepts.  These are the deployed services.
+List the available intercepts.  These are the deployed services (i.e. `appservice`, `imageservice`, `specsservice`,
+`inventoryservice`):
 
 `edgectl intercept available`
 
-Now, launch your local services so that when they are intercepted by AES and sent to your localhost, they
-will provide the services that are currently running in the cloud.
+Finally, launch a few services locally so that when they are intercepted by AES and sent to your `localhost`, they
+will provide the services that are currently running in the cloud:
 
 `edgectl intercept add appservice -t localhost:8080`
 
@@ -152,5 +157,25 @@ will provide the services that are currently running in the cloud.
 
 `edgectl intercept add inventoryservice -t localhost:8082`
 
-## Some easy modifications to see the Service Preview working
+## Some easy code and data modifications to see the Service Preview working
 
+In the Application service, you can make some easy changes to the code and see results immediately.  The main
+program is `appservice/main.go`.
+
+**Change the homepage image** by modifying the filename in the `TitleImageURL` in the `HomePage` struct.  This is
+created in the `getHomePage` function.  The default image is `DHC2-Beaver.jpg`; change this to `B17-Staggerwing.jpg`
+restart the application service, and reload the home page  You should see the new homepage with the red Staggerwing.
+Alternatively, add your own image to `appservice/static/images/` and modify `doHomePage` as needed.
+
+**Change the currency being displayed** in the Inventory page.  The default currency is defined in `main.go` as
+
+`var localCurrency = "USD"`
+
+This can be changed to "NOK" (Norwegian Kroner) or "EUR" (Euros).  The exchange rate is hard-coded in the `localizePrice`
+function.  Once you have made the change, restart the appservice, navigate to the Inventory page and refresh.  You
+should see all the prices change to the currency that you selected.
+
+**Remove some aircraft from the Inventory**.  Assuming you are also running the `inventoryservice` locally and have
+intercepted it with `edgectl intercept`, remove some entries from the file `inventoryservice/data/inventory.json`,
+restart the `inventoryservice`, and reload the Inventory page.  You should see that the aircraft that you removed
+from the inventory are no longer displayed.
