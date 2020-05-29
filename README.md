@@ -20,7 +20,7 @@ The Image, Inventory and Specs services provide a database-style lookup of image
 and specifications for each model of aircraft in the inventory.  To make the demo source as simple as possible,
 this information is stored directly in each service in a `data` directory.  In the case of the Image service, the
 individual aircraft images are stored as `.jpg` files where each file's name matches that aircraft's registration.
-In the Inventory and Specs services, the information is stored in individual `json` files, `data/inventory.json` and
+In the Inventory and Specs services, the information is stored in `json` files, `data/inventory.json` and
 `data/specs.json` respectively. These files are read in at startup time and the values returned as `json` when the service
 handles a request.  These `json` structures are unmarshalled into structs defined in the Application service code; any
 changes that are made in the Inventory or Specs services that modify the result format will need to have those
