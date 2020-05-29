@@ -1,0 +1,62 @@
+[
+  {
+    "registration": "N567M",
+    "model": "Beechcraft Bonanza",
+    "price": 73000
+  },
+  {
+    "registration": "N8880S",
+    "model": "Beechcraft Bonanza",
+    "price": 52000
+  },
+  {
+    "registration": "N8204T",
+    "model": "Cessna 180",
+    "price": 38000
+  },
+  {
+    "registration": "G-BTSM",
+    "model": "Cessna 180",
+    "price": 54000
+  },
+  {
+    "registration": "CF-NLX",
+    "model": "Alon Ercoupe",
+    "price": 14000
+  },
+  {
+    "registration": "CF-LUN",
+    "model": "Alon Ercoupe",
+    "price": 18000
+  },
+  {
+    "registration": "D-ICHO",
+    "model": "Cessna Skymaster",
+    "price": 92000
+  },
+  {
+    "registration": "CS-AUX",
+    "model": "Cessna Skymaster",
+    "price": 110000
+  },
+  {
+    "registration": "C-FQPK",
+    "model": "Piper Twin Comanche",
+    "price": 80000
+  },
+  {
+    "registration": "N818Y",
+    "model": "Piper Twin Comanche",
+    "price": 72000
+  },
+    {
+    "registration": "G-HAIG",
+    "model": "Rutan Long-EZ",
+    "price": 77000
+  },
+  {
+    "registration": "HR-ATQ",
+    "model": "Rutan Long-EZ",
+    "price": 109000
+  }
+]

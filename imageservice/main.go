@@ -10,11 +10,12 @@ import (
 	"net/http"
 	"os"
 	"path"
+	"path/filepath"
 )
 
 func imageServer(w http.ResponseWriter, r *http.Request) {
 	// Get the file requested by the registration number
-	imageFile, err := os.Open(fmt.Sprintf("data/%v.jpg", path.Base(r.URL.Path)))
+	imageFile, err := os.Open(filepath.Join("data", "images", path.Base(r.URL.Path)+".jpg"))
 
 	// Get the Host header
 	if err != nil {
@@ -38,7 +39,7 @@ func main() {
 	http.HandleFunc("/", imageServer)
 
 	// Start listening
-	fmt.Println("listening at localhost:8080")
-	fmt.Println("Try http://localhost:8080/N567M")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	fmt.Println("listening at localhost:8083")
+	fmt.Println("Try http://localhost:8083/N567M")
+	log.Fatal(http.ListenAndServe(":8083", nil))
 }
