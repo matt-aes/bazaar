@@ -1,0 +1,28 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: specsservice
+  namespace: bazaar
+  labels:
+    app: specsapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: specsapp
+  template:
+    metadata:
+      annotations:
+        getambassador.io/inject-traffic-agent: enabled
+      labels:
+        app: specsapp
+    spec:
+      containers:
+        - name: specsservice
+          image: docker.io/brucehorn/ambassador_service_preview_demo-specsservice:latest
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8081
+---
