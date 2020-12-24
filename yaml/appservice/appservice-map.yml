@@ -1,0 +1,20 @@
+---
+apiVersion: getambassador.io/v2
+kind: Mapping
+metadata:
+  name: appservice
+  namespace: bazaar
+  labels:
+    # public-api: "false"    ## labels for matching only some Mappings
+    documented: "true"    ## (note that "true" must be quoted)
+spec:
+  host: aes-demo.com
+  prefix: /
+  service: appservice.bazaar:80
+  # selector:               ## optional
+  #   matchNamespaces:
+  #     - bazaar
+  docs: 
+    # path: /.ambassador-internal/openapi-docs
+    url: https://raw.github.com/matt-aes/devportal-content/master/test-appservice-api.yaml
+---

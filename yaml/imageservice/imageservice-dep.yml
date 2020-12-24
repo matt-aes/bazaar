@@ -1,0 +1,29 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: imageservice
+  namespace: bazaar
+  labels:
+    app: imageapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: imageapp
+  template:
+    metadata:
+      annotations:
+        getambassador.io/inject-traffic-agent: enabled
+      labels:
+        app: imageapp
+    spec:
+      containers:
+        - name: imageservice
+          image: docker.io/brucehorn/ambassador_service_preview_demo-imageservice:latest
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8083
+              protocol: TCP
+---

@@ -1,0 +1,13 @@
+---
+apiVersion: getambassador.io/v2
+kind: Mapping
+metadata:
+  name: imageservice
+  namespace: bazaar
+spec:
+  host: aes-demo.com
+  prefix: /image/
+  service: imageservice.bazaar:80
+  docs: 
+    url: https://raw.github.com/matt-aes/devportal-content/master/test-appservice-api.yaml
+---
