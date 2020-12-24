@@ -1,0 +1,28 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inventoryservice
+  namespace: bazaar
+  labels:
+    app: inventoryapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inventoryapp
+  template:
+    metadata:
+      annotations:
+        getambassador.io/inject-traffic-agent: enabled
+      labels:
+        app: inventoryapp
+    spec:
+      containers:
+        - name: inventoryservice
+          image: docker.io/brucehorn/ambassador_service_preview_demo-inventoryservice:latest
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8082
+---

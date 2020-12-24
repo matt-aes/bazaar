@@ -1,0 +1,11 @@
+---
+apiVersion: getambassador.io/v2
+kind: Mapping
+metadata:
+  name: inventoryservice
+  namespace: bazaar
+spec:
+  host: aes-demo.com
+  prefix: /inventory/
+  service: inventoryservice.bazaar:80
+---

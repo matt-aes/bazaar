@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: inventoryservice
+  namespace: bazaar
+spec:
+  selector:
+    app: inventoryapp
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: http
+---
