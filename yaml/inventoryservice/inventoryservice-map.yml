@@ -5,7 +5,7 @@ metadata:
   name: inventoryservice
   namespace: bazaar
 spec:
-  host: aes-demo.com
+  host: aes-demo.mturner.k736.net
   prefix: /inventory/
   service: inventoryservice.bazaar:80
 ---
