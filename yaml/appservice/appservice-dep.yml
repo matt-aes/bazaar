@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: appservice
-          image: docker.io/ambmatt/bazaar-appservice   
+          image: docker.io/brucehorn/ambassador_service_preview_demo-appservice:latest  
           imagePullPolicy: Always
           ports:
             - name: http
