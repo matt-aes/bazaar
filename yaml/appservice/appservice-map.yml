@@ -5,8 +5,8 @@ metadata:
   name: appservice
   namespace: bazaar
   labels:
-    # public-api: "false"    ## labels for matching only some Mappings
-    documented: "true"    ## (note that "true" must be quoted)
+    public-api: "false"    ## labels for matching only some Mappings
+    documented: "false"    ## (note that "true" must be quoted)
 spec:
   host: aes-demo.mturner.k736.net
   prefix: /
