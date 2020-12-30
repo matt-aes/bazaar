@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: appservice
-          image: docker.io/ambmatt/bazaar-appservice   
+          image: docker.io/ambmatt/bazaar-appservice:latest   
           imagePullPolicy: Always
           ports:
             - name: http
