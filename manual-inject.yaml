@@ -1,0 +1,58 @@
+# This is hello-intercept.yaml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello
+  labels:
+    app: hello
+spec:
+  selector:
+    app: hello
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: http              # Traffic Agent listen port (note 1)
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello
+  labels:
+    app: hello
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello
+  template:
+    metadata:
+      labels:
+        app: hello
+    spec:
+      containers:
+        - name: hello               # Application container (note 2)
+          image: docker.io/datawire/hello-world:latest
+          ports:
+            - containerPort: 8000   # Application port
+        - name: traffic-agent       # Traffic Agent container (note 3)
+          image: docker.io/datawire/aes:1.5.2 # (note 4)
+          ports:
+            - name: http
+              containerPort: 9900   # Traffic Agent listen port
+          env:
+          - name: AGENT_SERVICE     # Name to use for intercepting (note 5)
+            value: hello
+          - name: AGENT_PORT        # Port on which to talk to the microservice (note 6)
+            value: "8000"
+          - name: AGENT_MANAGER_NAMESPACE # Namespace for contacting the Traffic Manager (note 7)
+            value: ambassador
+          - name: AMBASSADOR_NAMESPACE # Namespace in which this microservice is running (note 8)
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: AMBASSADOR_SINGLE_NAMESPACE # Traffic Agent container can run in a single-namespace (note 9)
+            value: "true"
+          - name: AGENT_LISTEN_PORT # Port on which to listen for connections (note 10)
+            value: "9900"
+      serviceAccountName: traffic-agent # The pod runs with traffic-agent RBAC

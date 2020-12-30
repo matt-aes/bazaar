@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: specsservice
+  labels:
+    app: specsapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: specsapp
+  template:
+    metadata:
+      annotations:
+        getambassador.io/inject-traffic-agent: enabled
+      labels:
+        app: specsapp
+    spec:
+      containers:
+        - name: specsservice
+          image: docker.io/brucehorn/ambassador_service_preview_demo-specsservice
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8081
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: specsservice
+spec:
+  selector:
+    app: specsapp
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: http
+
+---
+
+apiVersion: getambassador.io/v2
+kind: Mapping
+metadata:
+  name: specsservice
+  namespace: default
+spec:
+  prefix: /specs/
+  service: specsservice

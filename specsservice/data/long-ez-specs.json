@@ -1,0 +1,9 @@
+{
+  "model": "Rutan Long-EZ",
+  "type": "single",
+  "hp": 100,
+  "seats": 2,
+  "speed": 160,
+  "range": 1750,
+  "load": 615 }
+
