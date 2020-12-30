@@ -4,10 +4,13 @@ kind: Mapping
 metadata:
   name: imageservice
   namespace: bazaar
+  labels:
+    public-api: "false"    ## labels for matching only some Mappings
+    documented: "false"    ## (note that "true" must be quoted)
 spec:
   host: aes-demo.mturner.k736.net
   prefix: /image/
   service: imageservice.bazaar:80
   docs: 
-    url: https://raw.github.com/matt-aes/devportal-content/master/test-appservice-api.yaml
+    url: https://api.swaggerhub.com/apis/matt-aes/appservice/1.0.0/swagger.json
 ---
