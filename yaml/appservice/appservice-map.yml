@@ -16,5 +16,5 @@ spec:
   #     - bazaar
   docs: 
     # path: /.ambassador-internal/openapi-docs
-    url: https://raw.github.com/matt-aes/devportal-content/master/test-appservice-api.yaml
+    url: https://api.swaggerhub.com/apis/matt-aes/appservice/1.0.0/swagger.json
 ---
