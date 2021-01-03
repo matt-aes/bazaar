@@ -1,0 +1,33 @@
+---
+# apiVersion: getambassador.io/v2
+# kind: FilterPolicy
+# metadata:
+#   name: keycloak-bazaar-policy
+#   namespace: keycloak
+# spec:
+#   rules:
+#     - host: "aes-demo.com"
+#       path: "/"
+#       filters:
+#         - name: keycloak-oauth2-filter
+#           namespace: ambassador
+#           arguments:
+#             scope:
+#             - "offline_access"
+---
+apiVersion: getambassador.io/v2
+kind: FilterPolicy
+metadata:
+  name: api-filter-policy
+  namespace: bazaar
+spec:
+  rules:
+    - host: "aes-demo.mturner.k736.net"
+      path: "/"
+      filters:
+        - name: keycloak-oauth2-filter
+          namespace: ambassador
+          arguments:
+            scopes:
+              - "offline_access"
+---
