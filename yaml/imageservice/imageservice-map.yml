@@ -8,7 +8,7 @@ metadata:
     public-api: "false"    ## labels for matching only some Mappings
     documented: "false"    ## (note that "true" must be quoted)
 spec:
-  host: aes-demo.mturner.k736.net
+  host: aes-demo.com
   prefix: /image/
   service: imageservice.bazaar:80
   docs: 
