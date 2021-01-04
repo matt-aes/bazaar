@@ -5,7 +5,7 @@ metadata:
   name: specsservice
   namespace: bazaar
 spec:
-  host: aes-demo.mturner.k736.net
+  host: aes-demo.com
   prefix: /specs/
   service: specsservice.bazaar:80
 ---
